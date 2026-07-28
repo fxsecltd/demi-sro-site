@@ -1,16 +1,122 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeMI-SRO Consortium | Technical API Specification (Swagger)</title>
+    <!-- Подключение стилей Swagger UI из CDN -->
+    <link rel="stylesheet" href="https://unpkg.com" />
+    <style>
+        /* Кастомизация интерфейса под темную ИБ-тему консорциума (стиль GitHub Dark) */
+        :root {
+            --bg-color: #0d1117;
+            --surface-color: #161b22;
+            --border-color: #30363d;
+            --text-main: #c9d1d9;
+            --accent-color: #58a6ff;
+        }
+
+        html, body {
+            background-color: var(--bg-color) !important;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        }
+
+        /* Шапка страницы в стиле основного сайта */
+        .api-header {
+            background-color: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Инверсия и адаптация цветов Swagger под темную тему */
+        .swagger-ui {
+            filter: invert(88%) hue-rotate(180deg);
+            background-color: #f2f2f2; /* Компенсация инверсии для подложки */
+            padding: 20px 40px;
+        }
+
+        /* Исправление инверсии для блоков кода и JSON, чтобы они оставались читаемыми */
+        .swagger-ui .model-box, 
+        .swagger-ui pre, 
+        .swagger-ui code,
+        .swagger-ui .highlight-code {
+            filter: invert(100%) hue-rotate(180deg) !important;
+        }
+
+        /* Корректировка отображения основных заголовков Swagger */
+        .swagger-ui .info .title {
+            color: #000 !important;
+        }
+
+        .swagger-ui .info p, 
+        .swagger-ui .info li, 
+        .swagger-ui .info td {
+            color: #333 !important;
+        }
+
+        @media (max-width: 768px) {
+            .api-header {
+                padding: 15px 20px;
+            }
+            .swagger-ui {
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
 <body>
-<!-- Разметка для отображения Swagger -->
-<link rel="stylesheet" href="https://unpkg.com" />
-<div id="swagger-ui"></div>
-<script src="https://unpkg.com"></script>
-<script>
-  window.onload = () => {
-    SwaggerUIBundle({
-      url: 'openapi.yaml', // Путь к вашему файлу
-      dom_id: '#swagger-ui',
-    });
-  };
-</script>
+
+    <!-- Навигационная панель возврата на главную -->
+    <div class="api-header">
+        <div style="font-weight: 700; color: #fff; letter-spacing: 0.5px;">DeMI-SRO // Interface Specs</div>
+        <a href="index.html" class="back-link">← Back to Main Page</a>
+    </div>
+
+    <!-- Контейнер, в который инжектируется Swagger UI -->
+    <div id="swagger-ui"></div>
+
+    <!-- Подключение скриптов Swagger UI Bundle из CDN -->
+    <script src="https://unpkg.com"></script>
+    <script src="https://unpkg.com"></script>
+
+    <script>
+        window.onload = function() {
+            // Инициализация Swagger-интерфейса
+            const ui = SwaggerUIBundle({
+                url: "openapi.yaml", // Путь к файлу спецификации в репозитории demi-sro-site
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "BaseLayout",
+                // Отключаем встроенную верхнюю панель Swagger (валидатор и строку поиска URL), оставляем только чистую документацию
+                validatorUrl: null 
+            });
+
+            window.ui = ui;
+        };
+    </script>
 </body>
 </html>
