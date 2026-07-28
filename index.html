@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeMI-SRO Consortium | Международное Блокчейн-СРО альтернативных платежей</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface-color: #161b22;
+            --border-color: #30363d;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent-color: #58a6ff;
+            --accent-success: #238636;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: #21262d;
+            border: 1px solid var(--border-color);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        h2 {
+            color: #fff;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        p {
+            color: var(--text-main);
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .highlight-box {
+            background-color: #0d1117;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .lang-switch {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 35px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.2s, border-color 0.2s;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-success);
+            color: #fff;
+            border: 1px solid rgba(27, 31, 36, 0.15);
+        }
+
+        .btn-primary:hover {
+            background-color: #2ea44f;
+        }
+
+        .btn-secondary {
+            background-color: #21262d;
+            color: var(--accent-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #30363d;
+            border-color: #8b949e;
+        }
+
+        footer {
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: var(--border-color);
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="logo">DeMI-SRO Consortium</div>
+            <div class="badge">Decentralized Mutual Insurance SRO</div>
+        </header>
+
+        <section>
+            <h2>Приветственное обращение / Welcome Address</h2>
+            <p><strong>Уважаемые коллеги, участники финтех-рынка и эксперты по кибербезопасности!</strong></p>
+            <p>Мы рады приветствовать вас на официальном ресурсе технологического консорциума DeMI-SRO, созданного совместными усилиями ООО «ИИ Кибербезопасность» и ИП Шубралова Е.А. Наша цель — ликвидировать регуляторный и инфраструктурный вакуум в сфере обеспечения безопасности альтернативных платежных провайдеров (агрегаторов, платежных шлюзов, мобильных кошельков) на быстрорастущих рынках Южной и Юго-Восточной Азии.</p>
+            
+            <div class="highlight-box">
+                <p><strong>Суть проекта:</strong> Наша инициатива представляет собой международный аналог технологического СРО (Саморегулируемой Организации). Мы разработали децентрализованную модель компенсационного фонда, функционирующую на базе смарт-контрактов публичного блокчейна <strong>Ethereum Layer 1</strong> в рамках парадигмы «Код есть Закон». Протокол DeMI защищает агрегаторы от временных рисков отложенного фрода и чарджбэков, исключая необходимость в бюрократическом бумажном документообороте или замораживании оборотного капитала мерчантов.</p>
+            </div>
+            
+            <p>Мы полностью перенесли корпоративное управление членством в СРО в плоскость Git-технологий: направление криптографически подписанного Pull Request в единый реестр консорциума является достаточным и юридически обязывающим действием для вступления или выхода из альянса. Все участники автоматически фиксируются в прозрачном списке контрибьюторов проекта.</p>
+        </section>
+
+        <div class="button-group">
+            <a href="https://github.com" class="btn btn-primary" target="_blank">🌐 Официальный репозиторий GitHub</a>
+            <a href="draft-shubralov-demi-sro-payment-security-01.txt" class="btn btn-secondary" target="_blank">📄 Спецификация IETF Draft (BCP)</a>
+        </div>
+
+        <footer>
+            <p>© 2026 DeMI-SRO Consortium. Создано учредителями: ООО "ИИ Кибербезопасность" & ИП Шубралов Е.А.</p>
+            <p style="font-size: 11px; margin-top: 5px;">Управление контуром Zero-Trust: MPLS VPN | Satellite Mesh Infrastructure</p>
+        </footer>
+    </div>
+
+</body>
+</html>
