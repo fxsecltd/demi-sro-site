@@ -93,13 +93,17 @@
     <div id="swagger-ui"></div>
 
     <!-- Подключение скриптов Swagger UI с атрибутом defer для гарантированного порядка загрузки -->
+    <!-- Подключение скриптов Swagger UI -->
     <script src="https://unpkg.com" defer></script>
     <script src="https://unpkg.com" defer></script>
 
     <script>
-        // Используем более надежную проверку загрузки скриптов в DOM
+        let initAttempts = 0;
+        const MAX_ATTEMPTS = 15; // 15 попыток * 200мс = 3 секунды максимум на загрузку
+
         function initSwaggerUI() {
-            // Проверяем, доступны ли библиотеки в глобальной области видимости
+            initAttempts++;
+
             if (typeof SwaggerUIBundle !== 'undefined') {
                 const ui = SwaggerUIBundle({
                     url: "openapi.yaml",
@@ -116,13 +120,16 @@
                     validatorUrl: null 
                 });
                 window.ui = ui;
+                console.log("DeMI-SRO // Swagger UI successfully initialized.");
+            } else if (initAttempts < MAX_ATTEMPTS) {
+                // Увеличиваем интервал до 200мс — это снижает нагрузку на EventEmitter кошельков
+                setTimeout(initSwaggerUI, 200);
             } else {
-                // Если сеть медленная, ждем 50мс и пробуем снова (таймаут-предохранитель)
-                setTimeout(initSwaggerUI, 50);
+                console.error("DeMI-SRO // API Gateway Error: Swagger UI script load timeout.");
             }
         }
 
-        // Запускаем инициализацию сразу после готовности структуры документа, не дожидаясь картинок
+        // Запускаем безопасную инициализацию
         document.addEventListener('DOMContentLoaded', () => {
             initSwaggerUI();
         });
