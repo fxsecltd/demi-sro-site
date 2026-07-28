@@ -170,8 +170,16 @@
 
         // Переводы описания для Swagger инжекции на лету
         const descriptions = {
-            ru: "Техническая спецификация интерфейсов регионального Посольства (Embassy Node) консорциума DeMI-SRO. Все вызовы требуют обязательной аутентификации на уровне транспортного слоя через **mTLS** (Mutual TLS с проверкой клиентских сертификатов). Трафик изолирован внутри сети MPLS VPN.",
-            en: "Technical specification of the regional Embassy Node interfaces for the DeMI-SRO Consortium. All calls strictly require transport-layer authentication via **mTLS** (Mutual TLS with client certificate validation). Traffic is entirely isolated within the private MPLS VPN network mesh."
+            ru: {
+                mainInfo: "Техническая спецификация интерфейсов регионального Посольства (Embassy Node) консорциума DeMI-SRO. Все вызовы требуют обязательной аутентификации на уровне транспортного слоя через **mTLS** (Mutual TLS с проверкой клиентских сертификатов). Трафик изолирован внутри сети MPLS VPN.",
+                epochSubmit: "Вызывается платежным движком агрегатора каждые 10 минут (эпоха) для фиксации хэша транзакций в блокчейн-реестре.",
+                claimsRequest: "Инициирует выплату стейблкоинов (USDC/USDT) из компенсационного фонда при подтверждении отложенного фрода/чарджбэка."
+            },
+            en: {
+                mainInfo: "Technical specification of the regional Embassy Node interfaces for the DeMI-SRO Consortium. All calls strictly require transport-layer authentication via **mTLS** (Mutual TLS with client certificate validation). Traffic is entirely isolated within the private MPLS VPN network mesh.",
+                epochSubmit: "Invoked by the aggregator's payment engine every 10 minutes (epoch) to anchor the transaction hash into the blockchain ledger.",
+                claimsRequest: "Initiates stablecoin (USDC/USDT) payouts from the compensation fund upon verification of time-delayed fraud or clearing chargebacks."
+            }
         };
 
         function setLanguage(lang) {
