@@ -1,0 +1,16 @@
+<html>
+<body>
+<!-- Разметка для отображения Swagger -->
+<link rel="stylesheet" href="https://unpkg.com" />
+<div id="swagger-ui"></div>
+<script src="https://unpkg.com"></script>
+<script>
+  window.onload = () => {
+    SwaggerUIBundle({
+      url: 'openapi.yaml', // Путь к вашему файлу
+      dom_id: '#swagger-ui',
+    });
+  };
+</script>
+</body>
+</html>
