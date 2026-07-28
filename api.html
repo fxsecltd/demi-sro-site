@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" class="dark-mode">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DeMI-SRO Consortium | Technical API Specification (Swagger)</title>
     
-    <!-- Абсолютно локальное подключение стилей, защищенное от блокировок CDN и CORB -->
+    <!-- Локальное подключение стилей Swagger UI -->
     <link rel="stylesheet" href="swagger/swagger-ui.css" />
     
     <style>
         :root {
             --bg-color: #0d1117;
             --surface-color: #161b22;
-            --border-color: #444c56; /* Сделали границы ярче */
-            --text-main: #f0f6fc;     /* Яркий белый текст для лучшей читаемости */
-            --text-muted: #c9d1d9;    /* Светло-серебряный вместо тусклого серого */
-            --accent-color: #58a6ff;  /* Яркий финтех-синий */
+            --border-color: #444c56;
+            --text-main: #f0f6fc;
+            --text-muted: #c9d1d9;
+            --accent-color: #58a6ff;
         }
 
         html, body {
@@ -35,6 +35,12 @@
             align-items: center;
         }
 
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
         .back-link {
             color: var(--accent-color);
             text-decoration: none;
@@ -47,13 +53,38 @@
             opacity: 0.8;
         }
 
-        /* Полная кастомизация Swagger UI под ультра-контрастный темный режим (GitHub Dark High Contrast) */
+        .lang-switch-container {
+            display: flex;
+            gap: 5px;
+            background-color: #21262d;
+            padding: 4px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 4px 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .lang-btn.active {
+            background-color: var(--border-color);
+            color: #fff;
+        }
+
+        /* Высококонтрастный темный режим Swagger UI */
         .swagger-ui {
             background-color: var(--bg-color) !important;
             padding: 20px 40px;
         }
 
-        /* Перезапись всех блеклых серых текстов Swagger на высококонтрастные */
         .swagger-ui .info p, 
         .swagger-ui .info li, 
         .swagger-ui .info td,
@@ -64,7 +95,6 @@
             font-size: 14px;
         }
 
-        /* Стилизация заголовков параметров и моделей */
         .swagger-ui .info .title,
         .swagger-ui h1, .swagger-ui h2, .swagger-ui h3, .swagger-ui h4, .swagger-ui h5,
         .swagger-ui .opblock .opblock-summary-operation-id,
@@ -74,26 +104,32 @@
             font-weight: 600;
         }
 
-        /* Выделение блоков кода и JSON структур */
         .swagger-ui pre, 
         .swagger-ui code, 
         .swagger-ui .model-box,
         .swagger-ui .body-param__example {
             background-color: #1c2128 !important;
             border: 1px solid var(--border-color) !important;
-            color: #adbac7 !important; /* Контрастный текст для JSON */
+            color: #adbac7 !important;
             border-radius: 6px;
         }
 
-        /* Корректировка контрастности таблиц параметров */
         .swagger-ui .parameters-col_name,
         .swagger-ui .parameter__name {
-            color: #ff944d !important; /* Яркий оранжевый для имен переменных */
+            color: #ff944d !important;
             font-weight: 700;
         }
 
         .swagger-ui .parameter__type {
-            color: #79c0ff !important; /* Голубой для типов данных (string, integer) */
+            color: #79c0ff !important;
+        }
+
+        /* Мультиязычные элементы заголовка */
+        .lang-text {
+            display: none;
+        }
+        .lang-text.active-text {
+            display: inline;
         }
 
         @media (max-width: 768px) {
@@ -105,21 +141,68 @@
 <body>
 
     <div class="api-header">
-        <div style="font-weight: 700; color: #fff; letter-spacing: 0.5px;">DeMI-SRO // Interface Specs</div>
-        <a href="index.html" class="back-link">← Back to Main Page</a>
+        <div style="font-weight: 700; color: #fff; letter-spacing: 0.5px;">
+            <span class="lang-text ru active-text">DeMI-SRO // Спецификация API</span>
+            <span class="lang-text en">DeMI-SRO // Interface Specs</span>
+        </div>
+        <div class="header-controls">
+            <a href="index.html" class="back-link">
+                <span class="lang-text ru active-text">← На главную</span>
+                <span class="lang-text en">← Back to Main Page</span>
+            </a>
+            <div class="lang-switch-container">
+                <button class="lang-btn active" id="btn-ru" onclick="setLanguage('ru')">RU</button>
+                <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">EN</button>
+            </div>
+        </div>
     </div>
 
     <!-- Контейнер для Swagger UI -->
     <div id="swagger-ui"></div>
 
-    <!-- Локальные скрипты. Загружаются мгновенно с вашего собственного хостинга GitHub Pages -->
+    <!-- Локальные скрипты Swagger UI -->
     <script src="swagger/swagger-ui-bundle.js" id="swagger-bundle-script"></script>
     <script src="swagger/swagger-ui-standalone-preset.js"></script>
 
     <script>
+        // Глобальный объект для хранения инстанса Swagger UI
+        let swaggerUiInstance = null;
+
+        // Переводы описания для Swagger инжекции на лету
+        const descriptions = {
+            ru: "Техническая спецификация интерфейсов регионального Посольства (Embassy Node) консорциума DeMI-SRO. Все вызовы требуют обязательной аутентификации на уровне транспортного слоя через **mTLS** (Mutual TLS с проверкой клиентских сертификатов). Трафик изолирован внутри сети MPLS VPN.",
+            en: "Technical specification of the regional Embassy Node interfaces for the DeMI-SRO Consortium. All calls strictly require transport-layer authentication via **mTLS** (Mutual TLS with client certificate validation). Traffic is entirely isolated within the private MPLS VPN network mesh."
+        };
+
+        function setLanguage(lang) {
+            // 1. Сохраняем выбор в локальное хранилище браузера
+            localStorage.setItem('demi_lang', lang);
+            document.documentElement.lang = lang;
+
+            // 2. Переключаем текстовые элементы интерфейса (На главную / Заголовок)
+            document.querySelectorAll('.lang-text').forEach(el => el.classList.remove('active-text'));
+            document.querySelectorAll('.lang-text.' + lang).forEach(el => el.classList.add('active-text'));
+
+            // 3. Подсвечиваем активную кнопку
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
+
+            // 4. Динамически обновляем описание внутри уже отрендеренного Swagger UI без перезагрузки страницы
+            if (swaggerUiInstance) {
+                // Передаем новый текст в конфигурацию плагина Swagger
+                const infoBlock = document.querySelector('.swagger-ui .info .description p');
+                if (infoBlock) {
+                    infoBlock.innerHTML = lang === 'ru' ? descriptions.ru : descriptions.en;
+                }
+            }
+        }
+
         function runSwaggerDeployment() {
-            if (typeof SwaggerUIBundle !== 'undefined') {
-                const ui = SwaggerUIBundle({
+            if (typeof SwaggerUIBundle !== 'undefined' && !swaggerUiInstance) {
+                // Получаем текущий системный или сохраненный язык
+                let currentLang = localStorage.getItem('demi_lang') || 'ru';
+
+                swaggerUiInstance = SwaggerUIBundle({
                     url: "openapi.yaml",
                     dom_id: '#swagger-ui',
                     deepLinking: true,
@@ -132,20 +215,20 @@
                     ],
                     layout: "BaseLayout",
                     validatorUrl: null,
-                    // Включаем нативный темный режим, поддерживаемый Swagger 5.x
-                    theme: "dark" 
+                    theme: "dark",
+                    // Вызывается сразу после полной отрисовки Swagger
+                    onComplete: function() {
+                        setLanguage(currentLang);
+                    }
                 });
-                window.ui = ui;
-                console.log("DeMI-SRO // API Gateway: Local isolated Swagger UI deployed successfully.");
+                window.ui = swaggerUiInstance;
             }
         }
 
-        // Выполняем инициализацию по готовности локального бандла
+        // Инициализация при загрузке документа
         const mainBundle = document.getElementById('swagger-bundle-script');
         if (mainBundle) {
-            mainBundle.onload = function() {
-                runSwaggerDeployment();
-            };
+            mainBundle.onload = function() { runSwaggerDeployment(); };
             if (mainBundle.complete || typeof SwaggerUIBundle !== 'undefined') {
                 runSwaggerDeployment();
             }
