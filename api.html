@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark-mode">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DeMI-SRO Consortium | Technical API Specification (Swagger)</title>
-    <!-- Переключаем стили на зеркало cdnjs (Cloudflare Infrastructure) -->
-    <link rel="stylesheet" href="https://cloudflare.com" />
+    
+    <!-- Абсолютно локальное подключение стилей, защищенное от блокировок CDN и CORB -->
+    <link rel="stylesheet" href="swagger/swagger-ui.css" />
+    
     <style>
         :root {
             --bg-color: #0d1117;
@@ -43,28 +45,10 @@
             opacity: 0.8;
         }
 
-        /* Инверсия стилей под темную ИБ-тему */
+        /* Интеграция нативного темного режима Swagger UI без инверсии фильтров */
         .swagger-ui {
-            filter: invert(88%) hue-rotate(180deg);
-            background-color: #f2f2f2; 
+            background-color: var(--bg-color) !important;
             padding: 20px 40px;
-        }
-
-        .swagger-ui .model-box, 
-        .swagger-ui pre, 
-        .swagger-ui code,
-        .swagger-ui .highlight-code {
-            filter: invert(100%) hue-rotate(180deg) !important;
-        }
-
-        .swagger-ui .info .title {
-            color: #000 !important;
-        }
-
-        .swagger-ui .info p, 
-        .swagger-ui .info li, 
-        .swagger-ui .info td {
-            color: #333 !important;
         }
 
         @media (max-width: 768px) {
@@ -83,9 +67,9 @@
     <!-- Контейнер для Swagger UI -->
     <div id="swagger-ui"></div>
 
-    <!-- Загрузка скриптов через CDNJS с обработчиком onload для надежной ончейн-инициализации -->
-    <script src="https://cloudflare.com" id="swagger-bundle-script"></script>
-    <script src="https://cloudflare.com"></script>
+    <!-- Локальные скрипты. Загружаются мгновенно с вашего собственного хостинга GitHub Pages -->
+    <script src="swagger/swagger-ui-bundle.js" id="swagger-bundle-script"></script>
+    <script src="swagger/swagger-ui-standalone-preset.js"></script>
 
     <script>
         function runSwaggerDeployment() {
@@ -102,20 +86,21 @@
                         SwaggerUIBundle.plugins.DownloadUrl
                     ],
                     layout: "BaseLayout",
-                    validatorUrl: null 
+                    validatorUrl: null,
+                    // Включаем нативный темный режим, поддерживаемый Swagger 5.x
+                    theme: "dark" 
                 });
                 window.ui = ui;
-                console.log("DeMI-SRO // API Documentation loaded successfully via Cloudflare CDNJS Backbone.");
+                console.log("DeMI-SRO // API Gateway: Local isolated Swagger UI deployed successfully.");
             }
         }
 
-        // Привязываем выполнение к событию полной загрузки основного скрипта Swagger
+        // Выполняем инициализацию по готовности локального бандла
         const mainBundle = document.getElementById('swagger-bundle-script');
         if (mainBundle) {
             mainBundle.onload = function() {
                 runSwaggerDeployment();
             };
-            // Предохранитель на случай, если скрипт закешировался быстрее, чем отработал парсер
             if (mainBundle.complete || typeof SwaggerUIBundle !== 'undefined') {
                 runSwaggerDeployment();
             }
