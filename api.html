@@ -195,13 +195,19 @@
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-' + lang).classList.add('active');
 
-            // 4. Динамически обновляем описание внутри уже отрендеренного Swagger UI без перезагрузки страницы
+            // 4. Динамически обновляем контент внутри Swagger UI на лету
             if (swaggerUiInstance) {
-                // Передаем новый текст в конфигурацию плагина Swagger
-                const infoBlock = document.querySelector('.swagger-ui .info .description p');
-                if (infoBlock) {
-                    infoBlock.innerHTML = lang === 'ru' ? descriptions.ru : descriptions.en;
-                }
+                // Перевод главного описания в шапке
+                const mainInfoBlock = document.querySelector('.swagger-ui .info .description p');
+                if (mainInfoBlock) mainInfoBlock.innerHTML = translations[lang].mainInfo;
+
+                // Перевод описания для метода /epoch/submit
+                const epochBlock = document.querySelector('#operations-default-submitEpochBatch .opblock-description-wrapper p');
+                if (epochBlock) epochBlock.innerHTML = translations[lang].epochSubmit;
+
+                // Перевод описания для метода /claims/request
+                const claimsBlock = document.querySelector('#operations-default-requestClaim .opblock-description-wrapper p');
+                if (claimsBlock) claimsBlock.innerHTML = translations[lang].claimsRequest;
             }
         }
 
