@@ -93,30 +93,40 @@
     <div id="swagger-ui"></div>
 
     <!-- Подключение скриптов Swagger UI Bundle из CDN -->
-    <script src="https://unpkg.com"></script>
-    <script src="https://unpkg.com"></script>
+    <!-- Подключение скриптов Swagger UI с атрибутом defer для гарантированного порядка загрузки -->
+    <script src="https://unpkg.com" defer></script>
+    <script src="https://unpkg.com" defer></script>
 
     <script>
-        window.onload = function() {
-            // Инициализация Swagger-интерфейса
-            const ui = SwaggerUIBundle({
-                url: "openapi.yaml", // Путь к файлу спецификации в репозитории demi-sro-site
-                dom_id: '#swagger-ui',
-                deepLinking: true,
-                presets: [
-                    SwaggerUIBundle.presets.apis,
-                    SwaggerUIStandalonePreset
-                ],
-                plugins: [
-                    SwaggerUIBundle.plugins.DownloadUrl
-                ],
-                layout: "BaseLayout",
-                // Отключаем встроенную верхнюю панель Swagger (валидатор и строку поиска URL), оставляем только чистую документацию
-                validatorUrl: null 
-            });
+        // Используем более надежную проверку загрузки скриптов в DOM
+        function initSwaggerUI() {
+            // Проверяем, доступны ли библиотеки в глобальной области видимости
+            if (typeof SwaggerUIBundle !== 'undefined') {
+                const ui = SwaggerUIBundle({
+                    url: "openapi.yaml",
+                    dom_id: '#swagger-ui',
+                    deepLinking: true,
+                    presets: [
+                        SwaggerUIBundle.presets.apis,
+                        SwaggerUIStandalonePreset
+                    ],
+                    plugins: [
+                        SwaggerUIBundle.plugins.DownloadUrl
+                    ],
+                    layout: "BaseLayout",
+                    validatorUrl: null 
+                });
+                window.ui = ui;
+            } else {
+                // Если сеть медленная, ждем 50мс и пробуем снова (таймаут-предохранитель)
+                setTimeout(initSwaggerUI, 50);
+            }
+        }
 
-            window.ui = ui;
-        };
+        // Запускаем инициализацию сразу после готовности структуры документа, не дожидаясь картинок
+        document.addEventListener('DOMContentLoaded', () => {
+            initSwaggerUI();
+        });
     </script>
 </body>
 </html>
